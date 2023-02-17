@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VM Analysis</title>
+</head>
+<body>
+    <h1 align="center">虚拟机内存和置备空间使用情况</h1>
+    <iframe src="/summary/bar/username" width="100%" height="420px"></iframe>
+    <div id="b2ae4886232b4158b2ccb6b464b59642" class="chart-container">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class=flashes>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+
+      <div>
+        <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" name="file_form">
+          <input type="file" name="filename" placeholder="仅支持 CSV 文件">
+          <button type="submit">上传</button>
+        </form>
+      </div>
+
+      {% if users or usages %}
+      <br />
+      <hr />
+      <div><a href="{{ url_for('summary_bar', group='usage')}}">所有用途的内存和置备空间使用情况（柱状图 online）</a></div>
+      <div><a href="{{ url_for('summary_pie', group='username', series='memory')}}">所有用户的内存使用情况（饼图 online）</a></div>
+      <div><a href="{{ url_for('summary_pie', group='username', series='storage')}}">所有用户的置备空间使用情况（饼图）</a></div>
+      <div><a href="{{ url_for('summary_pie', group='usage', series='memory')}}">所有用途的内存使用情况（饼图 online）</a></div>
+      <div><a href="{{ url_for('summary_pie', group='usage', series='storage')}}">所有用途的置备空间使用情况（饼图）</a></div>
+      {% endif %}
+
+      {% if users %}
+      <br />
+      <hr />
+      <div>
+        <h4>指定某个用户按用途聚合（online）</h4>
+        <form action="{{ url_for('query_user') }}" method="get" name="user_bar_form">
+          <select name="user" title="sel">
+            {% for username in users_online %}
+            <option value="{{ username }}">{{ username }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit">查询</button>>
+        </form>
+      </div>
+
+      {% endif %}
+
+      {% if usages %}
+      <br />
+      <hr />
+      <div>
+        <h4>指定某个用途按用户聚合（online）</h4>
+        <form action="{{ url_for('query_usage') }}" method="get" name="usage_bar_form">
+          <select name="usage" title="sel">
+            {% for usage in usage_online %}
+            <option value="{{ usage }}">{{ usage }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit">查询</button>>
+        </form>
+      </div>
+      {% endif %}
+
+    </div>
+</body>
+</html>
